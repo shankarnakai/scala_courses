@@ -9,19 +9,18 @@ class Directory( override val parentPath: String,
                  val contents: List[DirEntry]) extends DirEntry(parentPath, name) {
 
   def getAllFoldersInPath: List[String] = path.substring(1)
-    .split(Directory.Separator)
+    .split(Directory.SEPARATOR)
     .toList
     .filter(x => !x.isEmpty)
 
   def findEntry(entryName: String): DirEntry = {
-    //TODO: Search for more explanation about @tailrec annotation
     @tailrec
     def findEntryHelper(name: String, contentList: List[DirEntry]) : DirEntry =
       if(contentList.isEmpty) null
+      else if(contentList.head.name.equals(name)) contentList.head
       else findEntryHelper(name, contentList.tail)
 
-
-    findEntryHelper(name, contents)
+    findEntryHelper(entryName, contents)
   }
 
   def addEntry(newEntry: DirEntry) : Directory = new Directory(parentPath, name, contents:+newEntry)
@@ -37,16 +36,20 @@ class Directory( override val parentPath: String,
 
   def hasEntry(name: String): Boolean = findEntry(name)  != null
 
+  def isRoot : Boolean = parentPath.isEmpty
+
   override def getType: String = "Directory"
+
+  override def isDirectory: Boolean = true
+  override def isFile: Boolean = false
 
   override def asDirectory: Directory = this
 
   override def asFile: File = throw new FileSystemException("A directory can't be converted to a File")
-
 }
 
 object Directory {
-  val Separator = "/"
+  val SEPARATOR = "/"
   val ROOT_PATH= "/"
 
   def ROOT: Directory = Directory.empty("", "")

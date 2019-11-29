@@ -8,7 +8,7 @@ abstract class CreateEntry(name: String) extends Command {
     val wd = state.wd
     if(wd.hasEntry(name)) {
      state.setMessage(s"Entry ${name} already existe!")
-    } else if(name.contains(Directory.Separator)) {
+    } else if(name.contains(Directory.SEPARATOR)) {
       state.setMessage(s"${name} must not contain separators!")
     } else if(checkIllegal(name)) {
      state.setMessage(s"${name}: Ileggal entry name!")
