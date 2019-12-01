@@ -1,7 +1,5 @@
 package com.rtjvm.scala.oop.filesystem
 
-import java.util.Scanner
-
 import com.rtjvm.scala.oop.commands.Command
 import com.rtjvm.scala.oop.files.Directory
 /**
@@ -9,14 +7,14 @@ import com.rtjvm.scala.oop.files.Directory
   */
 object Filesystem extends App {
   val root = Directory.ROOT
-  var state = State(root, root)
+  val initialState = State(root, root)
 
-  val scanner = new Scanner(System.in)
-
-  while(true) {
-    state.show
-
-    val input = scanner.nextLine()
-    state = Command.from(input).apply(state)
+  initialState.show
+  io.Source.stdin.getLines().foldLeft(initialState) {
+    (state, input)  => {
+      val newState = Command.from(input).apply(state)
+      newState.show
+      newState
+    }
   }
 }

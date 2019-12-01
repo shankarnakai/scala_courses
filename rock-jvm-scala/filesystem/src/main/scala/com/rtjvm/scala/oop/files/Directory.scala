@@ -29,7 +29,7 @@ class Directory( override val parentPath: String,
     if(!hasEntry(entryName)) this
     else new Directory(parentPath, name, contents.filter(x => !x.name.equals(entryName)))
 
-  def replaceEntry(entryName: String, newEntry: Directory): Directory =
+  def replaceEntry(entryName: String, newEntry: DirEntry): Directory =
     new Directory(parentPath, name, contents.filter(e => !e.name.equals(entryName)) :+ newEntry)
 
 
